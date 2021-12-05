@@ -1,0 +1,20 @@
+- Añadir esto al POM debajo de </dependencies>:
+<build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+            <archive>
+            <manifest>
+                <mainClass>SkeletonMain</mainClass>
+            </manifest>
+            </archive>
+        </configuration>
+        </plugin>
+    </plugins>
+  </build>
+
+- Copiar los archivos .java de src/test/java a src/main/java
+- Copiar el archivo log4j2.properties de src/test/resources a src/main/resources
+- En el directorio del POM ejecutar mvn assembly:assembly -DdescriptorId=jar-with-dependencies
