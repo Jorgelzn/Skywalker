@@ -7,7 +7,7 @@ from tqdm import tqdm
 def initialize(num_poblacion):
     poblacion=[]
     for i in range(num_poblacion):
-        poblacion.append(np.random.rand(403))
+        poblacion.append(np.random.uniform(-1,1,58))
     return poblacion
 
 def get_fitness(poblacion):
@@ -56,8 +56,8 @@ def combine(poblacion, mutaciones):
 
 if __name__ == "__main__":
 
-    generations = 3
-    poblacion = initialize(3)
+    generations = 5
+    poblacion = initialize(5)
     fitness_poblacion = get_fitness(poblacion)
 
     for i in range(generations):
@@ -74,7 +74,9 @@ if __name__ == "__main__":
                 fitness_poblacion[individuo] = fitness_descendientes[individuo]
 
         print("Best fitness of generation:",min(fitness_poblacion))
-        
-    print("Best model weights:",poblacion[argmin(fitness_poblacion)])
+    
+    best = poblacion[argmin(fitness_poblacion)]
+    print("Best model weights:",best)
+    np.savetxt("individuo.csv",best, delimiter=",")
 
 

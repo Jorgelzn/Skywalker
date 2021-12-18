@@ -1,21 +1,15 @@
-import sys
-import math
 import numpy as np
 import tensorflow as tf
-
-tf.get_logger().setLevel('ERROR')
 
 model = tf.keras.models.load_model("model.h5")
 
 individuo = np.genfromtxt('individuo.csv', delimiter=',')
 
-pesos1 = np.reshape(individuo[:140], (7,20))
-pesos2 = individuo[140:160]
-pesos3 = np.reshape(individuo[160:360], (20,10))
-pesos4 = individuo[360:370]
-pesos5 = np.reshape(individuo[370:400], (10,3))
-pesos6 = individuo[400:]
-model.set_weights([pesos1,pesos2,pesos3,pesos4,pesos5,pesos6])
+pesos1 = np.reshape(individuo[:35], (7,5))
+pesos2 = individuo[35:40]
+pesos3 = np.reshape(individuo[40:55], (5,3))
+pesos4 = individuo[55:]
+model.set_weights([pesos1,pesos2,pesos3,pesos4])
 
 numCheckpoints = int(input())
 checkpoints = []
@@ -27,7 +21,13 @@ while True:
     checkpoint_index, x, y, vx, vy, angle = [int(i) for i in input().split()]
     checkpoint_x = checkpoints[checkpoint_index][0]
     checkpoint_y = checkpoints[checkpoint_index][1]
-    prediction= model.predict([[checkpoint_x,checkpoint_y, x, y, vx, vy, angle]])[0]
-    if prediction[2]>200:
-        prediction[2]=0
-    print(int(prediction[0]),int(prediction[1]),int(prediction[2]))
+    data = [[checkpoint_x,checkpoint_y, x, y, vx, vy, angle]]
+    data = (data - np.min(data)) / (np.max(data) - np.min(data))
+    prediction= model.predict(data)[0]*100
+
+    speed = abs(int(prediction[2]))
+    pointx = checkpoint_x+int(prediction[0])
+    pointy = checkpoint_y+int(prediction[1])
+
+
+    print(pointx,pointy,speed)
