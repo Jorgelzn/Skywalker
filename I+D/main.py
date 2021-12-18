@@ -19,25 +19,28 @@ def get_fitness(poblacion):
         fitness.append(value)
     return fitness
 
-def mute(poblacion,factor_mutacion):
+def mute(poblacion,mutation_factor):
     mutaciones = []
-    vectors = rnd.sample([a for a in range(len(poblacion))],3)
-    valor_w = vectors[0]
-    valor_y = vectors[1]
-    valor_z = vectors[2]
     
     for individuo in range(len(poblacion)):
         mutacion = []
+
+        vectors = rnd.sample([a for a in range(len(poblacion))],3)
+        valor_w = vectors[0]
+        valor_y = vectors[1]
+        valor_z = vectors[2]
+
         for gen in range(poblacion[individuo].size):
             w = poblacion[valor_w][gen]
             y = poblacion[valor_y][gen]
             z = poblacion[valor_z][gen]
-            mutacion.append(w+factor_mutacion*(y-z))
+            mutacion.append(w+mutation_factor*(y-z))
+
         mutaciones.append(np.array(mutacion))
 
     return mutaciones
 
-def combine(poblacion, mutaciones):
+def combine(poblacion, mutaciones,combination_factor):
     
     descendientes = []
     
@@ -46,11 +49,11 @@ def combine(poblacion, mutaciones):
         descendiente = []
         
         for i in range(poblacion[0].size):
-            valor = rnd.randint(0,1)
-            if(valor == 0):
-                descendiente.append(poblacion[j][i])
-            else:
+            valor = rnd.uniform(0,1)
+            if(valor <= combination_factor):
                 descendiente.append(mutaciones[j][i])
+            else:
+                descendiente.append(poblacion[j][i])
 
         descendientes.append(np.array(descendiente))
         
@@ -67,7 +70,7 @@ if __name__ == "__main__":
         
         mutaciones = mute(poblacion,0.8)
 
-        descendientes = combine(poblacion,mutaciones)
+        descendientes = combine(poblacion,mutaciones,0.5)
 
         fitness_descendientes = get_fitness(descendientes)
 
@@ -75,6 +78,7 @@ if __name__ == "__main__":
             if fitness_descendientes[individuo] < fitness_poblacion[individuo]:
                 poblacion[individuo] = descendientes[individuo]
                 fitness_poblacion[individuo] = fitness_descendientes[individuo]
+
         print("Generation",i+1)
         print("fitness population:",fitness_poblacion)
         print("Best fitness of generation:",min(fitness_poblacion))
