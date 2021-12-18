@@ -26,14 +26,11 @@ def mute(poblacion,mutation_factor):
         mutacion = []
 
         vectors = rnd.sample([a for a in range(len(poblacion))],3)
-        valor_w = vectors[0]
-        valor_y = vectors[1]
-        valor_z = vectors[2]
 
         for gen in range(poblacion[individuo].size):
-            w = poblacion[valor_w][gen]
-            y = poblacion[valor_y][gen]
-            z = poblacion[valor_z][gen]
+            w = poblacion[vectors[0]][gen]
+            y = poblacion[vectors[1]][gen]
+            z = poblacion[vectors[2]][gen]
             mutacion.append(w+mutation_factor*(y-z))
 
         mutaciones.append(np.array(mutacion))
