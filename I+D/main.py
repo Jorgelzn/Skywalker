@@ -56,11 +56,23 @@ def combine(poblacion, mutaciones,combination_factor):
         
     return descendientes
 
+def selection(poblacion,descendientes,fitness_poblacion,fitness_descendientes):
+    
+    mid_poblacion = np.array(poblacion + descendientes)
+    mid_fitness = fitness_poblacion + fitness_descendientes
+
+    new_population = mid_poblacion[np.argsort(mid_fitness)][:len(poblacion)].tolist()
+    new_fitness = sorted(mid_fitness)[:len(fitness_poblacion)]
+
+    for ind in range(len(new_population)):
+        new_population[ind]=np.array(new_population[ind])
+
+    return new_population,new_fitness
 
 if __name__ == "__main__":
 
-    generations = 10
-    poblacion = initialize(10)
+    generations = 2
+    poblacion = initialize(3)
     fitness_poblacion = get_fitness(poblacion)
 
     for i in range(generations):
@@ -71,10 +83,7 @@ if __name__ == "__main__":
 
         fitness_descendientes = get_fitness(descendientes)
 
-        for individuo in range(len(poblacion)):
-            if fitness_descendientes[individuo] < fitness_poblacion[individuo]:
-                poblacion[individuo] = descendientes[individuo]
-                fitness_poblacion[individuo] = fitness_descendientes[individuo]
+        poblacion,fitness_poblacion = selection(poblacion,descendientes,fitness_poblacion,fitness_descendientes)
 
         print("Generation",i+1)
         print("fitness population:",fitness_poblacion)
