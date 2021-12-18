@@ -13,7 +13,10 @@ def initialize(num_poblacion):
 def get_fitness(poblacion):
     fitness=[]
     for i in tqdm (range(len(poblacion)), desc="Loading..."):
-        fitness.append(getFitness(poblacion[i]))
+        value = getFitness(poblacion[i])
+        if value <= 130:
+            value=370
+        fitness.append(value)
     return fitness
 
 def mute(poblacion,factor_mutacion):
@@ -56,8 +59,8 @@ def combine(poblacion, mutaciones):
 
 if __name__ == "__main__":
 
-    generations = 5
-    poblacion = initialize(5)
+    generations = 10
+    poblacion = initialize(10)
     fitness_poblacion = get_fitness(poblacion)
 
     for i in range(generations):
@@ -72,9 +75,10 @@ if __name__ == "__main__":
             if fitness_descendientes[individuo] < fitness_poblacion[individuo]:
                 poblacion[individuo] = descendientes[individuo]
                 fitness_poblacion[individuo] = fitness_descendientes[individuo]
-
+        print("Generation",i+1)
+        print("fitness population:",fitness_poblacion)
         print("Best fitness of generation:",min(fitness_poblacion))
-    
+
     best = poblacion[argmin(fitness_poblacion)]
     print("Best model weights:",best)
     np.savetxt("individuo.csv",best, delimiter=",")
