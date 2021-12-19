@@ -1,0 +1,5 @@
+Reemplazar SkeletonMain.java y Constants.java en el proyecto AGERacer.
+Elegir los hiperparámetros de la estrategia evolutiva en el main de algoritmo.py
+Copiar algoritmo.py, agente_gen.py y fitnessProxy.py a la carpeta del pom de AGERacer.
+Copiar los mapas a la carpeta config de AGERacer.
+Ejecutar EstrategiaEvolutiva.py.
